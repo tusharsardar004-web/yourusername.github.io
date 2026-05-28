@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <!-- Import QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #qrcode {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+        #qrcode img {
+            border: 5px solid #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .download-btn {
+            display: none;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .download-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>QR Code Generator</h2>
+        <input type="text" id="linkInput" placeholder="Enter your link (e.g. https://google.com)">
+        <button onclick="generateQR()">Generate QR Code</button>
+        
+        <div id="qrcode"></div>
+        <a id="downloadLink" class="download-btn" download="qrcode.png">Download Image</a>
+    </div>
+
+    <script>
+        var qrcodeObj = null;
+
+        function generateQR() {
+            var link = document.getElementById('linkInput').value;
+            var qrContainer = document.getElementById('qrcode');
+            var downloadLink = document.getElementById('downloadLink');
+
+            if (!link) {
+                alert("Please enter a link!");
+                return;
+            }
+
+            // Clear previous QR code
+            qrContainer.innerHTML = "";
+            downloadLink.style.display = "none";
+
+            // Create new QR code
+            qrcodeObj = new QRCode(qrContainer, {
+                text: link,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            // Wait a moment for image to generate, then show download button
+            setTimeout(function() {
+                var img = qrContainer.querySelector("img");
+                if (img && img.src) {
+                    downloadLink.href = img.src;
+                    downloadLink.style.display = "inline-block";
+                }
+            }, 100);
+        }
+    </script>
+
+</body>
+</html>
